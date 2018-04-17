@@ -25,6 +25,9 @@ import android.app.NotificationManager.Policy;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -301,6 +304,9 @@ public class GBApplication extends Application {
     public static boolean isRunningMarshmallowOrLater() {
         return VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
+    public static boolean isRunningNougatOrLater() {
+        return VERSION.SDK_INT >= Build.VERSION_CODES.N;
+    }
 
     public static boolean isRunningOreoOrLater(){
         return VERSION.SDK_INT >= Build.VERSION_CODES.O;
@@ -506,7 +512,7 @@ public class GBApplication extends Application {
             case 0:
                 String legacyGender = sharedPrefs.getString("mi_user_gender", null);
                 String legacyHeight = sharedPrefs.getString("mi_user_height_cm", null);
-                String legacyWeigth = sharedPrefs.getString("mi_user_weight_kg", null);
+                String legacyWeight = sharedPrefs.getString("mi_user_weight_kg", null);
                 String legacyYOB = sharedPrefs.getString("mi_user_year_of_birth", null);
                 if (legacyGender != null) {
                     int gender = "male".equals(legacyGender) ? 1 : "female".equals(legacyGender) ? 0 : 2;
@@ -517,8 +523,8 @@ public class GBApplication extends Application {
                     editor.putString(ActivityUser.PREF_USER_HEIGHT_CM, legacyHeight);
                     editor.remove("mi_user_height_cm");
                 }
-                if (legacyWeigth != null) {
-                    editor.putString(ActivityUser.PREF_USER_WEIGHT_KG, legacyWeigth);
+                if (legacyWeight != null) {
+                    editor.putString(ActivityUser.PREF_USER_WEIGHT_KG, legacyWeight);
                     editor.remove("mi_user_weight_kg");
                 }
                 if (legacyYOB != null) {
@@ -606,5 +612,25 @@ public class GBApplication extends Application {
 
     public static Locale getLanguage() {
         return language;
+    }
+
+    public String getVersion() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_META_DATA).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            GB.log("Unable to determine Gadgetbridge's version", GB.WARN, e);
+            return "0.0.0";
+        }
+    }
+
+    public String getNameAndVersion() {
+        try {
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_META_DATA);
+            return String.format("%s %s", appInfo.name, packageInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            GB.log("Unable to determine Gadgetbridge's name/version", GB.WARN, e);
+            return "Gadgetbridge";
+        }
     }
 }

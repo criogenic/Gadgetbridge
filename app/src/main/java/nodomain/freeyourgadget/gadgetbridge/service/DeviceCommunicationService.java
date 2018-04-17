@@ -86,7 +86,7 @@ import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_DI
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_ENABLE_HEARTRATE_SLEEP_SUPPORT;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_ENABLE_REALTIME_HEARTRATE_MEASUREMENT;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_ENABLE_REALTIME_STEPS;
-import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_FETCH_ACTIVITY_DATA;
+import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_FETCH_RECORDED_DATA;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_FIND_DEVICE;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_HEARTRATE_TEST;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.ACTION_INSTALL;
@@ -127,6 +127,7 @@ import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_CAN
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_CANNEDMESSAGES_TYPE;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_CONFIG;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_CONNECT_FIRST_TIME;
+import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_RECORDED_DATA_TYPES;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_FIND_START;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_INTERVAL_SECONDS;
 import static nodomain.freeyourgadget.gadgetbridge.model.DeviceService.EXTRA_MUSIC_ALBUM;
@@ -355,7 +356,7 @@ public class DeviceCommunicationService extends Service implements SharedPrefere
                         || (notificationSpec.type == NotificationType.GENERIC_SMS && notificationSpec.phoneNumber != null)) {
                     // NOTE: maybe not where it belongs
                     if (prefs.getBoolean("pebble_force_untested", false)) {
-                        // I would rather like to save that as an array in ShadredPreferences
+                        // I would rather like to save that as an array in SharedPreferences
                         // this would work but I dont know how to do the same in the Settings Activity's xml
                         ArrayList<String> replies = new ArrayList<>();
                         for (int i = 1; i <= 16; i++) {
@@ -401,8 +402,9 @@ public class DeviceCommunicationService extends Service implements SharedPrefere
                 mDeviceSupport.onHeartRateTest();
                 break;
             }
-            case ACTION_FETCH_ACTIVITY_DATA: {
-                mDeviceSupport.onFetchActivityData();
+            case ACTION_FETCH_RECORDED_DATA: {
+                int dataTypes = intent.getIntExtra(EXTRA_RECORDED_DATA_TYPES, 0);
+                mDeviceSupport.onFetchRecordedData(dataTypes);
                 break;
             }
             case ACTION_DISCONNECT: {

@@ -47,8 +47,8 @@
   <string name="pref_header_general">הגדרות כלליות</string>
   <string name="pref_title_general_autoconnectonbluetooth">התחברות להתקן כאשר ה־Bluetooth פועל</string>
   <string name="pref_title_general_autostartonboot">התחלה אוטומטית</string>
-  <string name="pref_title_general_autocreonnect">התחברות אוטומטית מחדש</string>
-  <string name="pref_title_audo_player">נגן מדיה מועדף</string>
+  <string name="pref_title_general_autoreconnect">התחברות אוטומטית מחדש</string>
+  <string name="pref_title_audio_player">נגן מדיה מועדף</string>
   <string name="pref_default">בררת מחדל</string>
   <string name="pref_header_datetime">שעה ותאריך</string>
   <string name="pref_title_datetime_syctimeonconnect">סנכרון השעה</string>
@@ -499,5 +499,24 @@
 
     <string name="notification_channel_name">הודעות של Gadgetbridge</string>
 <string name="devicetype_xwatch">XWatch</string>
+
+    <string name="on">פעיל</string>
+    <string name="controlcenter_start_activity_tracks">מסלולי הפעילות שלך</string>
+    <string name="activity_type_not_measured">ללא מדידה</string>
+    <string name="activity_type_activity">פעילות</string>
+    <string name="activity_type_light_sleep">שינה קלה</string>
+    <string name="activity_type_deep_sleep">שינה עמוקה</string>
+    <string name="activity_type_not_worn">ההתקן לא נענד</string>
+    <string name="activity_type_running">ריצה</string>
+    <string name="activity_type_walking">הליכה</string>
+    <string name="activity_type_swimming">שחייה</string>
+    <string name="activity_type_unknown">פעילות לא ידועה</string>
+    <string name="activity_summaries">פעילויות</string>
+    <string name="activity_type_biking">רכיבת אופניים</string>
+    <string name="activity_type_treadmill">הליכון</string>
+
+    <string name="select_all">בחירת הכול</string>
+    <string name="share">שיתוף</string>
+    <string name="reset_index">איפוס מועד הקבלה</string>
 
     </resources>

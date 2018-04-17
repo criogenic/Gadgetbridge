@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="0.26.1" versioncode="127">
+        <change> Fix crashes and connection problems on Android 6 and lower</change>
+    </release>
+    <release version="0.26.0" versioncode="126">
+        <change>Amazfit Bip: Initial support for GPS tracks</change>
+        <change>Pebble: Wind speed/direction support and bugfixes for weather when using background javascript</change>
+    </release>
     <release version="0.25.1" versioncode="125">
         <change>Amazfit Cor: Try to send weather location instead of AQI</change>
         <change>Amazfit Bip: Support setting start end end time for background light when lifting the arm</change>
