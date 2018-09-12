@@ -168,11 +168,11 @@ public class LiveActivityFragment extends AbstractChartFragment {
     private void addSample(ActivitySample sample) {
         int heartRate = sample.getHeartRate();
         int timestamp = tsTranslation.shorten(sample.getTimestamp());
-        if (HeartRateUtils.isValidHeartRateValue(heartRate)) {
+        if (HeartRateUtils.getInstance().isValidHeartRateValue(heartRate)) {
             setCurrentHeartRate(heartRate, timestamp);
         }
         int steps = sample.getSteps();
-        if (steps != ActivitySample.NOT_MEASURED) {
+        if (steps > 0) {
             addEntries(steps, timestamp);
         }
     }
@@ -470,8 +470,8 @@ public class LiveActivityFragment extends AbstractChartFragment {
         yAxisRight.setDrawLabels(true);
         yAxisRight.setDrawTopYLabelEntry(false);
         yAxisRight.setTextColor(CHART_TEXT_COLOR);
-        yAxisRight.setAxisMaximum(HeartRateUtils.MAX_HEART_RATE_VALUE);
-        yAxisRight.setAxisMinimum(HeartRateUtils.MIN_HEART_RATE_VALUE);
+        yAxisRight.setAxisMaximum(HeartRateUtils.getInstance().getMaxHeartRate());
+        yAxisRight.setAxisMinimum(HeartRateUtils.getInstance().getMinHeartRate());
 
         mHistorySet = new LineDataSet(new ArrayList<Entry>(), getString(R.string.live_activity_steps_history));
         mHistorySet.setAxisDependency(YAxis.AxisDependency.LEFT);
