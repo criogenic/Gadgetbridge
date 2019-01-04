@@ -89,6 +89,11 @@ public abstract class RoidmiCoordinator extends AbstractDeviceCoordinator {
     }
 
     @Override
+    public int getAlarmSlotCount() {
+        return 0;
+    }
+
+    @Override
     public boolean supportsSmartWakeup(GBDevice device) {
         return false;
     }
@@ -131,5 +136,10 @@ public abstract class RoidmiCoordinator extends AbstractDeviceCoordinator {
     @Override
     public boolean supportsLedColor() {
         return true;
+    }
+
+    @Override
+    public int[] getColorPresets() {
+        return RoidmiConst.COLOR_PRESETS;
     }
 }

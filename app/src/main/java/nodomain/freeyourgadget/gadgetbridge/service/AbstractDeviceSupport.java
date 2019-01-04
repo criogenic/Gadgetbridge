@@ -52,8 +52,8 @@ import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventAppInfo;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventBatteryInfo;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventCallControl;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventDisplayMessage;
-import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventFmFrequency;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventFindPhone;
+import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventFmFrequency;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventLEDColor;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventMusicControl;
 import nodomain.freeyourgadget.gadgetbridge.deviceevents.GBDeviceEventNotificationControl;
@@ -174,6 +174,7 @@ public abstract class AbstractDeviceSupport implements DeviceSupport {
         switch (deviceEvent.event) {
             case START:
                 Intent startIntent = new Intent(getContext(), FindPhoneActivity.class);
+                startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(startIntent);
                 break;
             case STOP:
@@ -216,7 +217,7 @@ public abstract class AbstractDeviceSupport implements DeviceSupport {
 
     protected void handleGBDeviceEvent(GBDeviceEventLEDColor colorEvent) {
         Context context = getContext();
-        LOG.info("Got event for LED Color");
+        LOG.info("Got event for LED Color: #" + Integer.toHexString(colorEvent.color).toUpperCase());
         if (gbDevice == null) {
             return;
         }
@@ -241,11 +242,11 @@ public abstract class AbstractDeviceSupport implements DeviceSupport {
         Intent appInfoIntent = new Intent(AbstractAppManagerFragment.ACTION_REFRESH_APPLIST);
         int appCount = appInfoEvent.apps.length;
         appInfoIntent.putExtra("app_count", appCount);
-        for (Integer i = 0; i < appCount; i++) {
-            appInfoIntent.putExtra("app_name" + i.toString(), appInfoEvent.apps[i].getName());
-            appInfoIntent.putExtra("app_creator" + i.toString(), appInfoEvent.apps[i].getCreator());
-            appInfoIntent.putExtra("app_uuid" + i.toString(), appInfoEvent.apps[i].getUUID().toString());
-            appInfoIntent.putExtra("app_type" + i.toString(), appInfoEvent.apps[i].getType().ordinal());
+        for (int i = 0; i < appCount; i++) {
+            appInfoIntent.putExtra("app_name" + i, appInfoEvent.apps[i].getName());
+            appInfoIntent.putExtra("app_creator" + i, appInfoEvent.apps[i].getCreator());
+            appInfoIntent.putExtra("app_uuid" + i, appInfoEvent.apps[i].getUUID().toString());
+            appInfoIntent.putExtra("app_type" + i, appInfoEvent.apps[i].getType().ordinal());
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(appInfoIntent);
     }
@@ -323,7 +324,7 @@ public abstract class AbstractDeviceSupport implements DeviceSupport {
                 break;
             case REPLY:
                 if (deviceEvent.phoneNumber == null) {
-                    deviceEvent.phoneNumber = (String) GBApplication.getIDSenderLookup().lookup(deviceEvent.handle);
+                    deviceEvent.phoneNumber = (String) GBApplication.getIDSenderLookup().lookup((int) (deviceEvent.handle >> 4));
                 }
                 if (deviceEvent.phoneNumber != null) {
                     LOG.info("Got notification reply for SMS from " + deviceEvent.phoneNumber + " : " + deviceEvent.reply);
@@ -337,6 +338,7 @@ public abstract class AbstractDeviceSupport implements DeviceSupport {
         if (action != null) {
             Intent notificationListenerIntent = new Intent(action);
             notificationListenerIntent.putExtra("handle", deviceEvent.handle);
+            notificationListenerIntent.putExtra("title", deviceEvent.title);
             if (deviceEvent.reply != null) {
                 Prefs prefs = GBApplication.getPrefs();
                 String suffix = prefs.getString("canned_reply_suffix", null);

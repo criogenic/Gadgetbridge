@@ -107,6 +107,11 @@ public final class BtLEQueue {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("About to run action: " + action);
                         }
+                        if (action instanceof GattListenerAction) {
+                            // this special action overwrites the transaction gatt listener (if any), it must
+                            // always be the last action in the transaction
+                            internalGattCallback.setTransactionGattCallback(((GattListenerAction)action).getGattCallback());
+                        }
                         if (action.run(mBluetoothGatt)) {
                             // check again, maybe due to some condition, action did not need to write, so we can't wait
                             boolean waitForResult = action.expectsResult();
@@ -517,7 +522,9 @@ public final class BtLEQueue {
 
         private void checkWaitingCharacteristic(BluetoothGattCharacteristic characteristic, int status) {
             if (status != BluetoothGatt.GATT_SUCCESS) {
-                LOG.debug("failed btle action, aborting transaction: " + characteristic.getUuid() + getStatusString(status));
+                if (characteristic != null) {
+                    LOG.debug("failed btle action, aborting transaction: " + characteristic.getUuid() + getStatusString(status));
+                }
                 mAbortTransaction = true;
             }
             if (characteristic != null && BtLEQueue.this.mWaitCharacteristic != null && characteristic.getUuid().equals(BtLEQueue.this.mWaitCharacteristic.getUuid())) {

@@ -149,6 +149,11 @@ public class HPlusCoordinator extends AbstractDeviceCoordinator {
     }
 
     @Override
+    public int getAlarmSlotCount() {
+        return 3; // FIXME - check the real value
+    }
+
+    @Override
     public boolean supportsSmartWakeup(GBDevice device) {
         return false;
     }
@@ -255,7 +260,7 @@ public class HPlusCoordinator extends AbstractDeviceCoordinator {
     }
 
     public static byte getAllDayHR(String address) {
-        Boolean value = (prefs.getBoolean(HPlusConstants.PREF_HPLUS_ALLDAYHR, true));
+        boolean value = (prefs.getBoolean(HPlusConstants.PREF_HPLUS_ALLDAYHR, true));
 
         if(value){
             return HPlusConstants.ARG_HEARTRATE_ALLDAY_ON;
