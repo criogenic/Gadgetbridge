@@ -1,4 +1,4 @@
-/*  Copyright (C) 2016-2018 Alberto, Andreas Shimokawa, Carsten Pfeiffer,
+/*  Copyright (C) 2016-2019 Alberto, Andreas Shimokawa, Carsten Pfeiffer,
     ivanovlev, João Paulo Barraca, Pavel Motyrev, Quallenauge
 
     This file is part of Gadgetbridge.
@@ -58,6 +58,7 @@ import nodomain.freeyourgadget.gadgetbridge.model.WeatherSpec;
 import nodomain.freeyourgadget.gadgetbridge.service.btle.AbstractBTLEDeviceSupport;
 import nodomain.freeyourgadget.gadgetbridge.service.btle.TransactionBuilder;
 import nodomain.freeyourgadget.gadgetbridge.service.btle.profiles.deviceinfo.DeviceInfo;
+import nodomain.freeyourgadget.gadgetbridge.util.AlarmUtils;
 import nodomain.freeyourgadget.gadgetbridge.util.GB;
 import nodomain.freeyourgadget.gadgetbridge.util.StringUtils;
 
@@ -430,13 +431,13 @@ public class HPlusSupport extends AbstractBTLEDeviceSupport {
 
             for (Alarm alarm : alarms) {
 
-                if (!alarm.isEnabled())
+                if (!alarm.getEnabled())
                     continue;
 
-                if (alarm.isSmartWakeup()) //Not available
+                if (alarm.getSmartWakeup()) //Not available
                     continue;
 
-                Calendar t = alarm.getAlarmCal();
+                Calendar t = AlarmUtils.toCalendar(alarm);
                 setAlarm(builder, t);
                 builder.queue(getQueue());
 
@@ -640,6 +641,11 @@ public class HPlusSupport extends AbstractBTLEDeviceSupport {
         } catch (IOException e) {
             GB.toast("Error setting configuration", Toast.LENGTH_LONG, GB.ERROR, e);
         }
+    }
+
+    @Override
+    public void onReadConfiguration(String config) {
+
     }
 
     @Override

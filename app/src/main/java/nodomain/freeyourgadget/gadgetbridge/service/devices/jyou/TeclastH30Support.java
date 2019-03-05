@@ -1,4 +1,4 @@
-/*  Copyright (C) 2017-2018 Andreas Shimokawa, Sami Alaoui
+/*  Copyright (C) 2017-2019 Andreas Shimokawa, Carsten Pfeiffer, Sami Alaoui
 
     This file is part of Gadgetbridge.
 
@@ -45,6 +45,7 @@ import nodomain.freeyourgadget.gadgetbridge.model.NotificationSpec;
 import nodomain.freeyourgadget.gadgetbridge.model.WeatherSpec;
 import nodomain.freeyourgadget.gadgetbridge.service.btle.AbstractBTLEDeviceSupport;
 import nodomain.freeyourgadget.gadgetbridge.service.btle.TransactionBuilder;
+import nodomain.freeyourgadget.gadgetbridge.util.AlarmUtils;
 import nodomain.freeyourgadget.gadgetbridge.util.GB;
 import nodomain.freeyourgadget.gadgetbridge.util.StringUtils;
 
@@ -277,11 +278,11 @@ public class TeclastH30Support extends AbstractBTLEDeviceSupport {
                     default:
                         return;
                 }
-                Calendar cal = alarms.get(i).getAlarmCal();
+                Calendar cal = AlarmUtils.toCalendar(alarms.get(i));
                 builder.write(ctrlCharacteristic, commandWithChecksum(
                         cmd,
-                        alarms.get(i).isEnabled() ? cal.get(Calendar.HOUR_OF_DAY) : -1,
-                        alarms.get(i).isEnabled() ? cal.get(Calendar.MINUTE) : -1
+                        alarms.get(i).getEnabled() ? cal.get(Calendar.HOUR_OF_DAY) : -1,
+                        alarms.get(i).getEnabled() ? cal.get(Calendar.MINUTE) : -1
                 ));
             }
             builder.queue(getQueue());
@@ -446,6 +447,11 @@ public class TeclastH30Support extends AbstractBTLEDeviceSupport {
 
     @Override
     public void onSendConfiguration(String config) {
+
+    }
+
+    @Override
+    public void onReadConfiguration(String config) {
 
     }
 
