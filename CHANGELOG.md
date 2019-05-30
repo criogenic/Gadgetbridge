@@ -1,5 +1,29 @@
 ### Changelog
 
+#### Version 0.33.1
+* Mi Band 3: Recognize "Xiaomi Band 3"
+* Amazfit Bip: Add German, Italian, French and Turkish to language settings
+
+#### Version 0.33.0
+* BFH-16: Initial support
+* Mi Band 2/3/Bip/Cor: Generate random per-device security keys when pairing, allow manual override to still support multiple android devices connecting to the same device
+* Mi Band 3: Add Indonesian, Thai, Arabic, Vietnamese, Portuguese, Dutch, Turkish and Ukrainian to language settings
+* Mi Band 3: Support flashing latest Japanese-Korean font
+* Amazfit Cor 2: Initial experimental support (untested)
+* Pebble: Add pebblekit extension for reopening last app
+* Casio: Bugfixes and improvements
+* Lookup contacts also in work profile
+* Fix searching in application name when blacklisting
+* Remove misleading title from database management activity when no legacy database is available
+
+#### Version 0.32.4
+* Make voip call support optional (disabled by default)
+* Amazfit Bip: GPX export corrections
+* ZeTime: Fix setting alarms
+* ZeTime: Fix wrong activity timestamps
+* ZeTime: Set HR alarm limits when changed, not only on connect
+* ZeTime: Sync preferences from the watch to Gadgetbridge settings
+
 #### Version 0.32.3
 * Fix a crash in charts due to a broken German translation
 * Fix a crash when transliterating emoji
